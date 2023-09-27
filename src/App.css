@@ -1,0 +1,9 @@
+.custom-flex {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
