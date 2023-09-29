@@ -131,7 +131,7 @@ const Negocio = () => {
                                     <FaWhatsapp className='feature-img' />
                                     <div>
                                             <h6 className='mb-0 feature-title'>WhatsApp</h6>
-                                            <p className="text-muted mb-0">{business.cell_phone_number}</p>
+                                            <p className="text-muted mb-0">{business.whatsapp_no}</p>
                                     </div>
                                     </div>
                                 </Col>
@@ -146,6 +146,7 @@ const Negocio = () => {
                                         <VscTasklist className='feature-img' />
                                         <div>
                                             <h6 className='mb-0 feature-title'>Emite factura</h6>
+                                            
                                         </div>
                                         </div>
                                     </Col>
@@ -161,7 +162,7 @@ const Negocio = () => {
                              <div> 
                              <div className='mt-5'>
                                 <h3 className='negocio-title'>Tienda en línea</h3>
-                                <p className="title-business">Toca el icono para abrir en una nueva pestaña.</p>
+                                <p className="title-business">{business.online_store}</p>
                              </div>
                                 <div className='mt-3 pb-3'>
                                   <Row>
