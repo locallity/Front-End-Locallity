@@ -108,7 +108,7 @@ const Negocio = () => {
                                     <div>
                                        <h6 className='mb-0 feature-title'>Correo electrónico</h6>
 
-                                            <p className="text-muted mb-0">Toca aquí para enviar</p>
+                                            <p className="text-muted mb-0">{business.email}</p>
                                       
                                     </div>
                                     </div>
@@ -120,7 +120,7 @@ const Negocio = () => {
                                     <div>
                                        <a className="text-decoration-none text-dark" href={"tel:"+business.cell_phone_number}>
                                             <h6 className='mb-0 feature-title'>Teléfono</h6>
-                                            <p className="text-muted mb-0">Toca aquí para llamar</p>
+                                            <p className="text-muted mb-0">{business.cell_phone_number}</p>
                                         </a>
                                     
                                     </div>
