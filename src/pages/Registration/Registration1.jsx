@@ -18,7 +18,7 @@ const Registration1 = ({handleInputChange, formData}) => {
     const subcategories = {
 
     "Comida":["Pasteles","Botanas", "Catering","Panadería"],
-    "Infantil/Bebés":["Muebles","Accesorios","Letreros de Maternidad","Rentas","Clases"],
+    "Infantil/Bebés":["Accesorios","Letreros de Maternidad","Rentas","Clases"],
     "Hogar":["Muebles", "Fragancias","Decoración","Cocinas / Exterior","Diseño de Interiores","Concept Store"],
     "Papelería":["Social","Impresiones"],
     "Eventos":["Decoración","Caterings","Renta de mobiliario","Invitaciones","Shows"],
