@@ -214,10 +214,10 @@ const Registration = () => {
     const [selectedImgsFile, setSelectedImgsFile] = useState(null);
     const [selectedLogoFile, setSelectedLogoFile] = useState(null);
     const [formData, setFormData] = useState({
-        name: 'Pakal', //oki
+        name: '', //oki
         price:'1000', //oki
-        manager: 'Emmanuel',//ok
-        description: 'Somos tu mejor opción de experiencia digital con Soluciones Tecnológicas Globales Pakal.', //oki
+        manager: '',//ok
+        description: '', //oki
         event_classification:'Birthday',//ok
         capacity_people:'100',//ok
         address_1:'Juarez Ave. #123',//ok
@@ -226,9 +226,9 @@ const Registration = () => {
         city: 'Monterrey',//oki
         state: 'Nuevo León',//oki
         country:'Mexico',//oki
-        postal_code: '01470',//oki
-        cell_phone_number: '555-123-4567',//oki
-        email: 'emmanuel@gmail.com',//oki
+        postal_code: '',//oki
+        cell_phone_number: '',//oki
+        email: '',//oki
         event_type:'social',//ok
         publication_likes:'1',//ok
         questions: '5',//oki
@@ -239,22 +239,22 @@ const Registration = () => {
         antiquity: '5',//oki
         physical_store: '1',//oki
         online_store: '1',//oki
-        url_google: 'https://goo.gl/maps/ucd1NUFHpBJBfzbL6',//oki
+        url_google: '',//oki
         business_days: '0-1',//oki
-        category: 'Infantil/Bebés',//oki
-        subcategory: 'Accesorios',//oki
-        discount_code: 'LOCALLITY10',//oki
+        category: '',//oki
+        subcategory: '',//oki
+        discount_code: '',//oki
         business_age:'0-1',//oki
-        municipality: 'demo',//oki
+        municipality: '',//oki
         accepts_credit_cards: '1',//oki
         is_owner_verified: '1',//oki
         status:'Activo',//oki
-        start_date: '09:00 AM',//oki
-        end_date: '06:00 PM',//oki
-        social_networks: 'https://www.instagram.com/technologies_solutions_pakal/,https://solutions-pakal.web.app/',//oki
+        start_date: '',//oki
+        end_date: '',//oki
+        social_networks: '',//oki
         national_shipment: '1',//oki
         local_shipment: '1',//oki
-        whatsapp_no:'+525569711608',//oki
+        whatsapp_no:'+52',//oki
     });
 
     const handleInputChange = (e) => { //=== ok
