@@ -156,7 +156,6 @@ const Navigation = () => {
                           </div>
 
                           <div className={`${showSubcategories === 'infantil-bebe' ? '' : 'd-none'}`}>
-                              <li  onClick={()=>setsubCategory('Muebles')}> Muebles </li>
                               <li  onClick={()=>setsubCategory('Accesorios')}> Accesorios </li>
                               <li  onClick={()=>setsubCategory('Maternidad')}> Letreros&nbsp;de&nbsp;Maternidad </li>
                               <li  onClick={()=>setsubCategory('Rentas')}> Rentas </li>
