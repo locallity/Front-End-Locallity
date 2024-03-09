@@ -435,7 +435,7 @@ const Registration = () => {
         //    'content-type': 'application/json'
         //};
         // const urlBase = 'http://localhost:5000/api/v1/locality';
-         const urlBase = 'https://api-business-registration-production.up.railway.app/api/v1/locality';
+         const urlBase = 'https://api-business-registration.onrender.com/api/v1/locality';
         
         try {
             const response = await axios.post(urlBase, data);
