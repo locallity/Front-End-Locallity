@@ -188,9 +188,9 @@ const Negocio = () => {
                                         } else if (trimmedLink.includes('facebook')) {
                                             icon = <BsFacebook className='feature-img' />;
                                             heading = "Facebook"
-                                            const splitParts = trimmedLink.split('/');
+                                            const splitParts = trimmedLink.split('.com/');
                                             lastElement = splitParts.pop();
-                                            linkUrl = "/"+lastElement
+                                            linkUrl = "@"+lastElement
                                         } else {
 
                                             icon = <TbWorld className='feature-img' />
@@ -331,11 +331,11 @@ const Negocio = () => {
                             }
                             
                         </div>
-                        <div className='mt-4'>
+                        {/* <div className='mt-4'>
                             <h5 className='fw-bolder'>CÓDIGO PROMOCIONAL</h5>
                             <FormControl className="w-75" type='text' placeholder='' />
                             <p className='mt-1 fw-bold'>Válido al 15 de octubre 2021.</p>
-                        </div>
+                        </div> */}
                     </Col>
                 </Row>
             </Container>

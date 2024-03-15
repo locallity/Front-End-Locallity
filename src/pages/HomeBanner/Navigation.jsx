@@ -220,7 +220,8 @@ const Navigation = () => {
                       </div> */}
 
                     </NavDropdown>
-                    <Nav.Link className={`navDesign navbarAlign ${color && 'text-white'}`} onClick={()=>navigate(pathname.registration)}>Registra tu marca</Nav.Link>
+                    
+                    {/* <Nav.Link className={`navDesign navbarAlign ${color && 'text-white'}`} onClick={()=>navigate(pathname.registration)}>Registra tu marca</Nav.Link> */}
          
                 </Nav>
               </Navbar.Collapse>
