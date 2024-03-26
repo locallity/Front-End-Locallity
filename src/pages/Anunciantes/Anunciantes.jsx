@@ -10,28 +10,92 @@ import { toast } from 'react-toastify';
 
 
 const category = [
-    {id: 1, lable: 'Papelería'},
-    {id: 2, lable: 'Eventos'},
-    {id: 3, lable: 'Regalos'},
-    {id: 4, lable: 'Bienestar'},
-    {id: 5, lable: 'Hogar'},
+    {id: 1, lable: 'Comida',
+        subCategories: [
+            {id: 1, lable: 'Pasteles'},
+            {id: 2, lable: 'Botanas'},
+            {id: 3, lable: 'Catering'},
+            {id: 4, lable: 'Panadería'},
+        ]
+    },
+    {id: 2, lable: 'Infantil/Bebés',
+        subCategories: [
+            {id: 1, lable: 'Muebles'},
+            {id: 2, lable: 'Accesorios'},
+            {id: 3, lable: 'Letreros de Maternidad'},
+            {id: 4, lable: 'Rentas'},
+            {id: 5, lable: 'Clases'},
+        ]
+    },
+    {id: 3, lable: 'Hogar',
+        subCategories: [
+            {id: 1, lable: 'Muebles'},
+            {id: 2, lable: 'Fragancias'},
+            {id: 3, lable: 'Decoración'},
+            {id: 4, lable: 'Cocinas / Exterior'},
+            {id: 5, lable: 'Diseño de Interiores'},
+            {id: 6, lable: 'Concept Store'},
+        ]
+    },
+    {id: 4, lable: 'Papelería',
+        subCategories: [
+            {id: 1, lable: 'Social'},
+            {id: 2, lable: 'Impresiones'},
+        ]
+    },
+    {id: 5, lable: 'Eventos',
+        subCategories: [
+            {id: 1, lable: 'Decoración'},
+            {id: 2, lable: 'Caterings'},
+            {id: 3, lable: 'Renta de mobiliario'},
+            {id: 4, lable: 'Invitaciones'},
+            {id: 5, lable: 'Shows'},
+        ]
+    },
+    {id: 6, lable: 'Regalos',
+        subCategories: [
+            {id: 1, lable: 'Fragancias'},
+            {id: 2, lable: 'Florerías'},
+            {id: 3, lable: 'Mesas de regalo'},
+            {id: 4, lable: 'Regalos Generales'},
+            {id: 5, lable: 'Concept Store'},
+        ]
+    },
+    {id: 7, lable: 'Bienestar',
+        subCategories: [
+            {id: 1, lable: 'Fragancias'},
+            {id: 2, lable: 'Florerías'},
+            {id: 3, lable: 'Mesas de regalo'},
+            {id: 4, lable: 'Regalos Generales'},
+            {id: 5, lable: 'Concept Store'},
+        ]
+    },
+    {id: 8, lable: 'Shopping',
+        subCategories: [
+            {id: 1, lable: 'Zapatos'},
+            {id: 2, lable: 'Ropa / Vestidos'},
+            {id: 3, lable: 'Trajes de baño'},
+            {id: 4, lable: 'Accesorios'},
+            {id: 5, lable: 'Cosméticos'},
+        ]
+    }
 ]
-const Subcategoría = [
-    {id: 1, lable: 'Muebles'},
-    {id: 2, lable: 'Fragancias'},
-    {id: 3, lable: 'Decoración General'},
-    {id: 4, lable: 'Cocina'},
-    {id: 5, lable: 'Mudanza'},
-    {id: 6, lable: 'Exterior'},
-    {id: 7, lable: 'Casa Inteligente'},
-    {id: 8, lable: 'Diseño de Interiores'},
-]
+// const Subcategoría = [
+//     {id: 1, lable: 'Muebles'},
+//     {id: 2, lable: 'Fragancias'},
+//     {id: 3, lable: 'Decoración General'},
+//     {id: 4, lable: 'Cocina'},
+//     {id: 5, lable: 'Mudanza'},
+//     {id: 6, lable: 'Exterior'},
+//     {id: 7, lable: 'Casa Inteligente'},
+//     {id: 8, lable: 'Diseño de Interiores'},
+// ]
 const OtrosFiltros = [
     {id: 1, lable: 'Facturacion', title: 'bill'},
     {id: 2, lable: 'Tienda Física', title: 'physical_store'},
     {id: 3, lable: 'Tienda Online', title: 'online_store'},
     {id: 4, lable: 'Envíos nacionales', title: 'shipping'},
-    {id: 5, lable: 'Negocio verificado', title: ''},
+    {id: 5, lable: 'Negocio verificado', title: 'is_owner_verified'},
 ]
 
 
@@ -39,15 +103,19 @@ const Anunciantes = () => {
     const [showCategory, setShowCategory] = useState(true);
     const [showSub, setShowSub] = useState(true);
     const [showFil, setShowFil] = useState(true);
+    const [showSubCategories, setShowSubCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [selectedOtherFilter, setSelectedOtherFilter] = useState('');
     const handleCategoryChange = (event, category) => {
         const isChecked = event.target.checked;
         if (isChecked) {
-            setSelectedCategory(category);
+            setShowSubCategories(category.subCategories);
+            setSelectedCategory(category.lable);
         } else {
             setSelectedCategory('');
+            setSelectedSubCategory('');
+            setShowSubCategories([]);
         }
     };
     const handleSubCategoryChange = (event, subCategory) => {
@@ -63,13 +131,10 @@ const Anunciantes = () => {
     };
     const handleOtherFilltersChange = (event, other) => {
         const isChecked = event.target.checked;
-        if (isChecked && selectedCategory && selectedSubCategory) {
+        if (isChecked) {
             setSelectedOtherFilter(other);
         } else {
             setSelectedOtherFilter('');
-            if (!selectedCategory || !selectedSubCategory) {
-                toast.warn(`Please Select ${!selectedCategory ? 'Category' : ''}, ${!selectedSubCategory ? 'SubCategory' : ''}`);
-            }
         }
     };
     return (
@@ -108,7 +173,7 @@ const Anunciantes = () => {
                                             id={`category-${item.id}`}
                                             label={item.lable}
                                             checked={selectedCategory && selectedCategory === item.lable}
-                                            onChange={(event) => handleCategoryChange(event, item.lable)}
+                                            onChange={(event) => handleCategoryChange(event, item)}
                                         />
                                         ))
                                     }
@@ -131,7 +196,7 @@ const Anunciantes = () => {
                                 showSub &&
                                 <div>
                                     {
-                                        Subcategoría.map(item => (
+                                        showSubCategories.map(item => (
                                             <Form.Check
                                             key={item.id}
                                             type='checkbox'
@@ -188,6 +253,7 @@ const Anunciantes = () => {
                             subCategory={selectedSubCategory}
                             setOtherFilter={setSelectedOtherFilter}
                             otherFilter={selectedOtherFilter}
+                            setShowSubCategories={setShowSubCategories}
                         />
                         
                 </Col>
