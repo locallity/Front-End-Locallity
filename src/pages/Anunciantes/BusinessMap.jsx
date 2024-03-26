@@ -9,14 +9,14 @@ import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 // import testImg from '../../assets/images/logo-4-01.jpg';
 
-const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter}) => {
+const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories}) => {
     const [maindata, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramsCategory = searchParams.get('category');
-    const updatedURL = window.location.pathname;
+    const paramsSubCategory = searchParams.get('subcategory');
     const navigate = useRedirect();
     const isInitialRender = useRef(true);
 
@@ -25,77 +25,75 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
             isInitialRender.current = false;
             return;
         }
-        if (categorie && subCategory && otherFilter) {
-            if (paramsCategory) {
-                navigate(updatedURL);
-            }
-            fetchData(categorie, subCategory, otherFilter);
+        if (categorie || subCategory || otherFilter) {
+            const urlWithoutQuery = window.location.pathname;
+            navigate(urlWithoutQuery);
         }
-        else if (categorie && subCategory) {
-            if (paramsCategory) {
-                navigate(updatedURL);
+
+        const fetchData = async (categorie, subCategory, otherFilter) => {
+            setLoading(true);
+            try {
+                let data = new FormData();
+                if (categorie && subCategory && otherFilter) {
+                    data.append('category', categorie);
+                    data.append('subcategory', subCategory);
+                    data.append(otherFilter?.title, '1');
+                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
+                    setData(response.data.data);
+                }
+                else if (categorie && subCategory) {
+                    data.append('category', categorie);
+                    data.append('subcategory', subCategory);
+                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
+                    setData(response.data.data);
+                }
+                else if (categorie && otherFilter) {
+                    data.append('category', categorie);
+                    data.append(otherFilter?.title, '1');
+                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
+                    setData(response.data.data);
+                }
+                else if (categorie) {
+                    data.append('category', categorie);
+                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
+                    setData(response.data.data);
+                }
+                else if (otherFilter) {
+                    data.append(otherFilter?.title, '1');
+                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
+                    setData(response.data.data);
+                }
+                else {
+                    const response = await axios.get(`${config.base_URL}${config.selectAll}`);
+                    setData(response.data.data);
+                }
+                
+                setLoading(false);
+            } catch (error) {
+                // console.error('Error fetching data:', error);
+                if (categorie && subCategory) {
+                    setSubCategory('');
+                }
+                else if (categorie) {
+                    setCategorie('');
+                    setShowSubCategories([]);
+                }
+                toast.warn('No data Availave for now');
+                setLoading(false);
             }
-            fetchData(categorie, subCategory);
-        }
-        else if (categorie) {
-            if (paramsCategory) {
-                navigate(updatedURL);
-            }
-            fetchData(categorie);
+        };
+        if (paramsCategory && paramsSubCategory) {
+            fetchData(paramsCategory, paramsSubCategory);
         }
         else if (paramsCategory) {
             fetchData(paramsCategory);
         }
         else {
-            fetchData();
+            fetchData(categorie, subCategory, otherFilter);
         }
-    }, [categorie, paramsCategory, subCategory, otherFilter]);
+    }, [categorie, subCategory, otherFilter, paramsCategory, paramsSubCategory]);
 
-    const fetchData = async (categorie, subCategory, otherFilter) => {
-        setLoading(true);
-        try {
-            if (categorie && subCategory && otherFilter) {
-                const data = new FormData();
-                data.append('category', categorie);
-                data.append('subcategory', subCategory);
-                data.append(`${otherFilter?.title}`, '1');
-                const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                setData(response.data.data);
-            }
-            else if (categorie && subCategory) {
-                const data = new FormData();
-                data.append('category', categorie);
-                data.append('subcategory', subCategory);
-                const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                setData(response.data.data);
-            }
-            else if (categorie) {
-                const data = new FormData();
-                data.append('category', categorie);
-                const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                setData(response.data.data);
-            }
-            else {
-                const response = await axios.get(`${config.base_URL}${config.selectAll}`);
-                setData(response.data.data);
-            }
-            setLoading(false);
-        } catch (error) {
-            // console.error('Error fetching data:', error);
-            if (categorie && subCategory && otherFilter) {
-                setOtherFilter('')
-            }
-            else if (categorie && subCategory) {
-                setSubCategory('')
-            }
-            else if (categorie) {
-                setCategorie('')
-            }
-            
-            toast.warn('No data Availave for now');
-            setLoading(false);
-        }
-    };
+    
 
     if (loading) {
         return <div className="d-flex justify-content-center py-5 my-5">
