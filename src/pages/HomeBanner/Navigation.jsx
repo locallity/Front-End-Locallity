@@ -240,9 +240,9 @@ const Navigation = () => {
 
                     </NavDropdown>
                   </div>
-                  <div className='d-flex align-items-center gap-2'>
+                  {/* <div className='d-flex align-items-center gap-2'>
                     <Nav.Link className={`navDesign ${color && 'text-white'}`} onClick={() => navigate(pathname.registration)}>Registra tu marca</Nav.Link>
-                  </div>
+                  </div> */}
                 </Nav>
               </Navbar.Collapse>
             </Container>
@@ -284,7 +284,7 @@ const Navigation = () => {
                     <Nav.Link className="navDesignXs"  href="#about" >Nosotros</Nav.Link>
                     <Nav.Link className="navDesignXs"  href="#safety">Seguridad</Nav.Link>
                     <Nav.Link className="navDesignXs"  href="#map">Mapa</Nav.Link>
-                    <Nav.Link className="navDesignXs" onClick={() => navigate(pathname.registration)}>Registra tu marca</Nav.Link>
+                    {/* <Nav.Link className="navDesignXs" onClick={() => navigate(pathname.registration)}>Registra tu marca</Nav.Link> */}
                 </Nav>
           </Navbar.Collapse>
 

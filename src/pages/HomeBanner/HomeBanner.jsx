@@ -95,7 +95,7 @@ const HomeBanner = () => {
                                                 </div>
                                                 <div className="categoryDetails ml-3">
                                                 <h5>Comida</h5>
-                                                <span>3158 anunciantes</span>
+                                                {/* <span>3158 anunciantes</span> */}
                                                 </div>
 
                                             </div>
@@ -113,7 +113,7 @@ const HomeBanner = () => {
                                                 </div>
                                                 <div className="categoryDetails ml-3">
                                                 <h5>Shopping</h5>
-                                                <span>3258 anunciantes</span>
+                                                {/* <span>3258 anunciantes</span> */}
                                                 </div>
                                             </div>
                                         </Card.Body>
@@ -130,7 +130,7 @@ const HomeBanner = () => {
                                                 </div>
                                                 <div className="categoryDetails ml-3">
                                                 <h5>Papeleria</h5>
-                                                <span>4719 anunciantes</span>
+                                                {/* <span>4719 anunciantes</span> */}
                                                 </div>
                                             </div>
                                         </Card.Body>
@@ -147,7 +147,7 @@ const HomeBanner = () => {
                                             </div>
                                             <div className="categoryDetails ml-3">
                                             <h5>Hogar</h5>
-                                            <span>4719 anunciantes</span>
+                                            {/* <span>4719 anunciantes</span> */}
                                             </div>
                                         </div>
                                     </Card.Body>
@@ -164,7 +164,7 @@ const HomeBanner = () => {
                                                 </div>
                                                 <div className="categoryDetails ml-3">
                                                 <h5>Regalos</h5>
-                                                <span>1453 anunciantes</span>
+                                                {/* <span>1453 anunciantes</span> */}
                                                 </div>
                                             </div>
                                         </Card.Body>
@@ -181,7 +181,7 @@ const HomeBanner = () => {
                                                 </div>
                                                 <div className="categoryDetails ml-3">
                                                 <h5>Bienestar</h5>
-                                                <span>980 anunciantes</span>
+                                                {/* <span>980 anunciantes</span> */}
                                                 </div>
                                             </div>
                                         </Card.Body>
@@ -199,7 +199,7 @@ const HomeBanner = () => {
                                                     </div>
                                                     <div className="categoryDetails ml-3">
                                                     <h5>Eventos</h5>
-                                                    <span>980 anunciantes</span>
+                                                    {/* <span>980 anunciantes</span> */}
                                                     </div>
                                                 </div>
                                             </Card.Body>
@@ -216,7 +216,7 @@ const HomeBanner = () => {
                                                 </div>
                                                 <div className="categoryDetails ml-3">
                                                 <h5>Infantil / Bebé</h5>
-                                                <span>3158 anunciantes</span>
+                                                {/* <span>3158 anunciantes</span> */}
                                                 </div>
                                             </div>
                                         </Card.Body>
