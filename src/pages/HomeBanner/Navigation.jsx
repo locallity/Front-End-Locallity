@@ -164,9 +164,9 @@ const Navigation = () => {
                 >
                   <div className="d-flex">
                     <Nav.Link className={`navDesign ${color && 'text-white'}`} onClick={() => navigate(pathname.home)}>Inicio</Nav.Link>
-                      <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="#about" >Nosotros</Nav.Link>
-                      <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="#safety">Seguridad</Nav.Link>
-                      <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="#map">Mapa</Nav.Link>
+                      <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="/#about" >Nosotros</Nav.Link>
+                      <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="/#safety">Seguridad</Nav.Link>
+                      <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="/#map">Mapa</Nav.Link>
                       <NavDropdown 
                       id="dropdownMenu" 
                       title="Categorías"
@@ -281,9 +281,9 @@ const Navigation = () => {
 
                 </NavDropdown>
 
-                    <Nav.Link className="navDesignXs"  href="#about" >Nosotros</Nav.Link>
-                    <Nav.Link className="navDesignXs"  href="#safety">Seguridad</Nav.Link>
-                    <Nav.Link className="navDesignXs"  href="#map">Mapa</Nav.Link>
+                    <Nav.Link className="navDesignXs"  href="/#about" >Nosotros</Nav.Link>
+                    <Nav.Link className="navDesignXs"  href="/#safety">Seguridad</Nav.Link>
+                    <Nav.Link className="navDesignXs"  href="/#map">Mapa</Nav.Link>
                     {/* <Nav.Link className="navDesignXs" onClick={() => navigate(pathname.registration)}>Registra tu marca</Nav.Link> */}
                 </Nav>
           </Navbar.Collapse>
