@@ -189,7 +189,7 @@ const Negocio = () => {
                     <div>
                       <h6 className="mb-0 feature-title">WhatsApp</h6>
                       <p className="text-muted mb-0">
-                        {business.cell_phone_number}
+                        {business?.whatsapp_no}
                       </p>
                     </div>
                   </div>
