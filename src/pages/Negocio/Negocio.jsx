@@ -78,7 +78,6 @@ const Negocio = () => {
           setBusiness(fetchedData.business_details[0]);
           console.log(fetchedData.business_details[0]);
           setImages(fetchedData.images);
-          console.log(fetchedData);
           const day = fetchedData.business_details[0].business_days.split(",");
           const socialNetworksArray =
             fetchedData.business_details[0].social_networks.split(",");
