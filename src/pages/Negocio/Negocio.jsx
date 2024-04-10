@@ -76,7 +76,6 @@ const Negocio = () => {
         const fetchedData = await fetchData(id_business);
         if (fetchedData) {
           setBusiness(fetchedData.business_details[0]);
-          console.log(fetchedData.business_details[0]);
           setImages(fetchedData.images);
           const day = fetchedData.business_details[0].business_days.split(",");
           const socialNetworksArray =
