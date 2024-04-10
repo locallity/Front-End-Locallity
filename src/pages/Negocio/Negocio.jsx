@@ -194,7 +194,7 @@ const Negocio = () => {
                   </div>
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 {business.bill ? (
                   <Col className="mt-4" lg={4}>
                     <div className="feature-card">
@@ -205,7 +205,7 @@ const Negocio = () => {
                     </div>
                   </Col>
                 ) : null}
-              </Row>
+              </Row> */}
             </div>
             {/* {business.online_store ? (
               <div>
@@ -460,6 +460,14 @@ const Negocio = () => {
                   <p>Negocio verificado</p>
                 </div>
               )}
+              {
+                business.bill ?
+                  <div className="feature-card mt-3">
+                    <VscTasklist className="feature-img" />
+                    <h6 className="mb-0 feature-title">Emite factura</h6>
+                  </div> :
+                  null
+              }
             </div>
             {/*                         <div className='mt-4'>
                             <h5 className='fw-bolder'>CÓDIGO PROMOCIONAL</h5>
