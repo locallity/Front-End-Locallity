@@ -78,6 +78,7 @@ const Negocio = () => {
           setBusiness(fetchedData.business_details[0]);
           console.log(fetchedData.business_details[0]);
           setImages(fetchedData.images);
+          console.log(fetchedData);
           const day = fetchedData.business_details[0].business_days.split(",");
           const socialNetworksArray =
             fetchedData.business_details[0].social_networks.split(",");
@@ -163,7 +164,7 @@ const Negocio = () => {
                           Correo electrónico
                         </h6>
 
-                        <p className="text-muted mb-0">Toca aquí para enviar</p>
+                        <p className="text-muted mb-0">{business?.email}</p>
                       </div>
                     </div>
                   </a>
@@ -177,7 +178,7 @@ const Negocio = () => {
                         href={"tel:" + business.cell_phone_number}
                       >
                         <h6 className="mb-0 feature-title">Teléfono</h6>
-                        <p className="text-muted mb-0">Toca aquí para llamar</p>
+                        <p className="text-muted mb-0">{business?.cell_phone_number}</p>
                       </a>
                     </div>
                   </div>
