@@ -268,8 +268,8 @@ const Navigation = () => {
                   
                   {
                       categoryWithSub.map(cat => (
-                        <ul className="navbar-nav ml-auto">
-                          <span key={cat.id} className='text-white' onClick={() => setCategory(cat.lable)}>{cat.lable}</span>
+                        <ul key={cat.id} className="navbar-nav ml-auto">
+                          <span className='text-white' onClick={() => setCategory(cat.lable)}>{cat.lable}</span>
                           {
                             cat.subCategories.map(subCat => (
                               <li key={subCat.id} className='text-white' onClick={() => setCategoryAndSub(cat.lable, subCat.lable)}>{subCat.lable}</li>
