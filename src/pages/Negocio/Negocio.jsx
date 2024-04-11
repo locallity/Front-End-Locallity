@@ -432,7 +432,7 @@ const Negocio = () => {
               </Col>
             </Row>
           </Col>
-          <Col lg={3} className="right-col-negocio">
+          <Col lg={3} className="right-col-negocio px-3">
             <div>
               <h4 className="fw-bolder">Características</h4>
               {business.delivery ? (
