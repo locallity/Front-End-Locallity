@@ -4,6 +4,7 @@ const config = {
     selectAll: '/selectAll',
     locality: '/locality',
     filter: '/filter',
+    allLogos: 'https://locallity-img.onrender.com/api/v1/all-logos',
 }
 
 export default config;

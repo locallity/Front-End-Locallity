@@ -3,26 +3,6 @@ import './HomeBanner.css';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Container } from 'react-bootstrap';
-// import img1 from '../../assets/_img/-01.png'
-// import img2 from '../../assets/_img/-02.png'
-// import img3 from '../../assets/_img/-03.png'
-// import img4 from '../../assets/_img/-04.png'
-// import img5 from '../../assets/_img/-05.png'
-// import img6 from '../../assets/_img/-06.png'
-// import img7 from '../../assets/_img/-07.png'
-// import img8 from '../../assets/_img/-08.png'
-// import img9 from '../../assets/_img/-09.png'
-// import img10 from '../../assets/_img/-10.png'
-// import img11 from '../../assets/_img/-11.png'
-// import img12 from '../../assets/_img/-12.png'
-// import img13 from '../../assets/_img/-13.png'
-// import img14 from '../../assets/_img/-14.png'
-// import img15 from '../../assets/_img/-15.png'
-// import img16 from '../../assets/_img/-16.png'
-// import artemisa from '../../assets/images/ARTEMISA.png';
-// import koko from '../../assets/images/Koko.png';
-// import plano from '../../assets/images/Plano.png';
-// import artefacto from '../../assets/images/artefacto.png';
 import config from '../../config';
 import axios from 'axios';
 
@@ -37,7 +17,7 @@ const HomeSlider = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${config.base_URL}${config.selectAll}`);
+            const response = await axios.get(`${config.allLogos}`);
             setData(response.data.data);
             setLoading(false);
         } catch (error) {
