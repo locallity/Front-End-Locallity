@@ -62,9 +62,9 @@ const HomeSlider = () => {
                 >
                 {
                     data.map((item, idx) => (
-                        item?.logo_url ? (
+                        (item?.logo_url && item?.business_id !== "undefined" && item?.business_id) ? (
                             <div key={idx} className="Items">
-                                <img className="images" src={item?.logo_url} alt={item.business_id} />
+                                <img className="images" src={item?.logo_url} alt={item?.business_id} />
                             </div>
                         ) : null
                     ))
