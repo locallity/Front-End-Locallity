@@ -103,29 +103,29 @@ const HomeSlider = () => {
     return (
         <Fragment>
             <Container className="mt-5 slider-container"> 
-                <Carousel responsive={responsive}
-                    autoPlay={true}
-                    autoPlaySpeed={2000}
-                    infinite={true}
-                >
+              <Carousel responsive={responsive}
+                  autoPlay={true}
+                  autoPlaySpeed={2000}
+                  infinite={true}
+              >
                 {
-                    data.map((item, idx) => (
-                        (item?.logo_url && item?.business_id !== "undefined" && item?.business_id) ? (
-                            <div key={idx} className="Items">
-                                <img className="images" src={item?.logo_url} alt={item?.business_id} />
-                            </div>
-                        ) : null
-                    ))
+                  data.map((item, idx) => (
+                      (item?.logo_url && item?.business_id !== "undefined" && item?.business_id) ? (
+                          <div key={idx} className="Items">
+                              <img className="images" src={item?.logo_url} alt={item?.business_id} />
+                          </div>
+                      ) : null
+                  ))
                 }
-                </Carousel>
-            {
-                totalPage > 1 &&
-                (<div className="paginate mt-5">
-                <span onClick={() => handlePageChange(currentPage - 1)}><MdKeyboardDoubleArrowLeft /></span>
-                {getPageLinks()}
-                <span onClick={() => handlePageChange(currentPage + 1)}><MdKeyboardDoubleArrowRight /></span>
-                </div>) 
-            }
+              </Carousel>
+              {
+                  totalPage > 1 &&
+                  (<div className="paginate mt-5">
+                  <span onClick={() => handlePageChange(currentPage - 1)}><MdKeyboardDoubleArrowLeft /></span>
+                  {getPageLinks()}
+                  <span onClick={() => handlePageChange(currentPage + 1)}><MdKeyboardDoubleArrowRight /></span>
+                  </div>) 
+              }
             </Container>
         </Fragment>
     );
