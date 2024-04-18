@@ -5,26 +5,74 @@ import "react-multi-carousel/lib/styles.css";
 import { Container } from 'react-bootstrap';
 import config from '../../config';
 import axios from 'axios';
+import { MdKeyboardDoubleArrowRight, MdKeyboardDoubleArrowLeft } from 'react-icons/md';
 
 const HomeSlider = () => {
     const [data, setData] = useState([]);
+    const [totalData, setTotalData] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.get(`${config.allLogos}?page=${currentPage}&limit=10`);
+                setData(response.data.data);
+                setTotalData(response.data.total_data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            }
+        };
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`${config.allLogos}`);
-            setData(response.data.data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setLoading(false);
+        fetchData();
+    }, [currentPage]);
+    
+
+    const dataPerPage = 10;
+    const totalPage = Math.ceil(totalData / dataPerPage);
+    const handlePageChange = (page) => {
+        if (page > 0 && page <= totalPage) {
+            setCurrentPage(page);
         }
     };
+
+    const pagesToShow = 3;
+    const getPageLinks = () => {
+        const pageLinks = [];
+        let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+        const endPage = Math.min(startPage + pagesToShow - 1, totalPage);
+    
+        if (totalPage > pagesToShow) {
+          if (endPage === totalPage) {
+            startPage = Math.max(endPage - pagesToShow + 1, 1);
+          } else if (startPage === 1) {
+            startPage = 1;
+          } else {
+            startPage = currentPage - Math.floor(pagesToShow / 2);
+          }
+        }
+    
+        for (let page = startPage; page <= endPage; page++) {
+          pageLinks.push(
+            <span
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={currentPage === page ? 'active' : ''}
+            >
+              {page}
+            </span>
+          );
+        }
+    
+        if (totalPage > pagesToShow && endPage < totalPage) {
+          pageLinks.push(<span key="ellipsis">...</span>);
+        }
+    
+        return pageLinks;
+      };
 
      if (loading) {
         return <div className="d-flex justify-content-center py-5 my-5">
@@ -70,6 +118,14 @@ const HomeSlider = () => {
                     ))
                 }
                 </Carousel>
+            {
+                totalPage > 1 &&
+                (<div className="paginate mt-5">
+                <span onClick={() => handlePageChange(currentPage - 1)}><MdKeyboardDoubleArrowLeft /></span>
+                {getPageLinks()}
+                <span onClick={() => handlePageChange(currentPage + 1)}><MdKeyboardDoubleArrowRight /></span>
+                </div>) 
+            }
             </Container>
         </Fragment>
     );
