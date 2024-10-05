@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Anunciantes.css';
 import { Row, Col, Form } from 'react-bootstrap';
 // import bakery from '../../assets/images/logo-4-01.jpg';
@@ -7,6 +7,7 @@ import Navigation from '../HomeBanner/Navigation';
 import BusinessMap from './BusinessMap';
 import { SlArrowUp, SlArrowDown } from 'react-icons/sl';
 import { toast } from 'react-toastify';
+import { useLocation } from 'react-router-dom';
 
 
 const category = [
@@ -107,6 +108,11 @@ const Anunciantes = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [selectedOtherFilter, setSelectedOtherFilter] = useState('');
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const paramsCategory = searchParams.get('category');
+    const paramsSubCategory = searchParams.get('subcategory');
+    const isInitialRenders = useRef(true);
     const handleCategoryChange = (event, category) => {
         const isChecked = event.target.checked;
         if (isChecked) {
@@ -137,6 +143,29 @@ const Anunciantes = () => {
             setSelectedOtherFilter('');
         }
     };
+
+    useEffect(() => {
+        if (isInitialRenders.current) {
+            isInitialRenders.current = false;
+            return;
+        }
+
+        if (paramsCategory) {
+            const foundCategory = category.find(cat => cat.lable === paramsCategory);
+            
+            if (foundCategory) {
+                setShowSubCategories(foundCategory.subCategories);
+                setSelectedCategory(foundCategory.lable);
+                if (paramsSubCategory) {
+                    setSelectedSubCategory(paramsSubCategory);
+                }
+            }
+        }
+        searchParams.delete('category');
+        searchParams.delete('subcategory');
+        window.history.replaceState({}, '', location.pathname);
+    }, [paramsCategory, paramsSubCategory]);
+
     return (
         <div>
             <Navigation />

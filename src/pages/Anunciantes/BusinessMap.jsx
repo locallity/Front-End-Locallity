@@ -5,103 +5,76 @@ import axios from 'axios';
 import config from '../../config';
 import { MdKeyboardDoubleArrowRight, MdKeyboardDoubleArrowLeft } from 'react-icons/md';
 import pathname from '../../routes';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 // import testImg from '../../assets/images/logo-4-01.jpg';
 
+const fetchAllData = async () => {
+    try {
+        const response = await axios.get(`${config.base_URL}${config.selectAll}`);
+        return response.data?.data || [];
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return []; 
+    }
+};
+
 const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories}) => {
-    const [maindata, setData] = useState([]);
+    const [maindata, setMainData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const paramsCategory = searchParams.get('category');
-    const paramsSubCategory = searchParams.get('subcategory');
     const navigate = useRedirect();
     const isInitialRender = useRef(true);
 
+    const fetchData = async (categorie, subCategory, otherFilter) => {
+        setLoading(true);
+        let data = new FormData();
+        try {
+            if (categorie) data.append('category', categorie);
+            if (subCategory) data.append('subcategory', subCategory);
+            if (otherFilter) data.append(otherFilter?.title, '1');
+
+            if (categorie || subCategory || otherFilter) {
+                console.log("categorie", categorie);
+                const response = await axios.post(`${config.base_URL}${config.filter}`, data);
+                setMainData(response.data?.data || []);
+            } else {
+                console.log("categorie", categorie);
+                const allData = await fetchAllData();
+                setMainData(allData);
+            }
+            
+        } catch (error) {
+            console.log('Error fetching data:', error);
+            setMainData([]);
+            // setShowData([]);
+            // handleNoData(categorie, subCategory);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Handle case when no data is found or there's an error
+    // const handleNoData = async (categorie, subCategory) => {
+    //     if (categorie && subCategory) setSubCategory('');
+    //     else if (categorie) {
+    //         setCategorie('');
+    //         setShowSubCategories([]);
+    //     }
+
+    //     setMainData(await fetchAllData());
+    // };
+
+    // Effect to trigger data fetching based on category, subcategory, or filters
     useEffect(() => {
         if (isInitialRender.current) {
             isInitialRender.current = false;
             return;
         }
-        if (categorie || subCategory || otherFilter) {
-            const urlWithoutQuery = window.location.pathname;
-            navigate(urlWithoutQuery);
-        }
-
-        const fetchData = async (categorie, subCategory, otherFilter) => {
-            setLoading(true);
-            try {
-                let data = new FormData();
-                if (categorie && subCategory && otherFilter) {
-                    data.append('category', categorie);
-                    data.append('subcategory', subCategory);
-                    data.append(otherFilter?.title, '1');
-                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                    setData(response.data.data);
-                }
-                else if (categorie && subCategory) {
-                    data.append('category', categorie);
-                    data.append('subcategory', subCategory);
-                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                    setData(response.data.data);
-                }
-                else if (categorie && otherFilter) {
-                    data.append('category', categorie);
-                    data.append(otherFilter?.title, '1');
-                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                    setData(response.data.data);
-                }
-                else if (categorie) {
-                    data.append('category', categorie);
-                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                    setData(response.data.data);
-                }
-                else if (otherFilter) {
-                    data.append(otherFilter?.title, '1');
-                    const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                    setData(response.data.data);
-                }
-                else {
-                    const response = await axios.get(`${config.base_URL}${config.selectAll}`);
-                    setData(response.data.data);
-                }
-                
-                setLoading(false);
-            } catch (error) {
-                // console.error('Error fetching data:', error);
-                if (categorie && subCategory) {
-                    setSubCategory('');
-                }
-                else if (categorie) {
-                    setCategorie('');
-                    setShowSubCategories([]);
-                }
-                toast.warn('No data Availave for now');
-                setLoading(false);
-            }
-        };
-        if (paramsCategory && paramsSubCategory) {
-            fetchData(paramsCategory, paramsSubCategory);
-        }
-        else if (paramsCategory) {
-            fetchData(paramsCategory);
-        }
-        else {
-            fetchData(categorie, subCategory, otherFilter);
-        }
-    }, [categorie, subCategory, otherFilter, paramsCategory, paramsSubCategory]);
-
-    
-
-    if (loading) {
-        return <div className="d-flex justify-content-center py-5 my-5">
-            <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
-            </div>
-        </div>
-    }
+        fetchData(categorie, subCategory, otherFilter);
+    }, [categorie, subCategory, otherFilter]);
 
     // const generateData = () => {
     //     const data = [];
@@ -117,8 +90,9 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     //     return data;
     //   };
     // const testData = generateData();
+
     const dataPerPage = 10;
-    const totalPage = Math.ceil(maindata.length / dataPerPage);
+    const totalPage = Math.ceil(maindata?.length / dataPerPage);
     const handlePageChange = (page) => {
         if (page > 0 && page <= totalPage) {
             setCurrentPage(page);
@@ -128,7 +102,7 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     const getPageData = () => {
         const startIndex = (currentPage - 1) * dataPerPage;
         const endIndex = startIndex + dataPerPage;
-        return maindata.slice(startIndex, endIndex);
+        return maindata?.slice(startIndex, endIndex);
     };
     const pagesToShow = 5;
     const getPageLinks = () => {
@@ -163,13 +137,27 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
         }
     
         return pageLinks;
-      };
+    };
+    
+    if (loading) {
+        return <div className="d-flex justify-content-center py-5 my-5">
+            <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
     return (
         <>
-            <p className="fs-6 fw-medium mt-1">{maindata.length} anunciantes</p>
-            <div className='row' style={{gap: '5px'}}>
+            <p className="fs-6 fw-medium mt-1">{maindata?.length} anunciantes</p>
+            <div className='row' style={{ gap: '5px' }}>
                 {
-                    getPageData().map(item => (
+                    maindata?.length === 0 &&
+                    <div className="text-center mt-5 pt-5">
+                        <p className="fs-3">No Data Found!</p>
+                    </div>
+                }
+                {
+                    getPageData()?.map(item => (
                         <div key={item.id_business} onClick={()=>navigate(`${pathname.negocio}/${item.id_business}`)} className='text-center cursor-pointer col-6 col-sm-4 col-xl-3 px-2 px-sm-2 mb-5 anuncian-card'>
                             <img src={item.logo_url} className="card-img-top" alt={item.name} />
                             <div>
