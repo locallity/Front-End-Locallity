@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 
 
-const category = [
+export const category = [
     {id: 1, lable: 'Comida',
         subCategories: [
             {id: 1, lable: 'Pasteles'},
@@ -144,27 +144,23 @@ const Anunciantes = () => {
         }
     };
 
-    useEffect(() => {
-        if (isInitialRenders.current) {
-            isInitialRenders.current = false;
-            return;
-        }
-
-        if (paramsCategory) {
-            const foundCategory = category.find(cat => cat.lable === paramsCategory);
+    // useEffect(() => {
+    //     if (isInitialRenders.current) {
+    //         isInitialRenders.current = false;
+    //     }
+    //     if (paramsCategory) {
+    //         const foundCategory = category.find(cat => cat.lable === paramsCategory);
             
-            if (foundCategory) {
-                setShowSubCategories(foundCategory.subCategories);
-                setSelectedCategory(foundCategory.lable);
-                if (paramsSubCategory) {
-                    setSelectedSubCategory(paramsSubCategory);
-                }
-            }
-        }
-        searchParams.delete('category');
-        searchParams.delete('subcategory');
-        window.history.replaceState({}, '', location.pathname);
-    }, [paramsCategory, paramsSubCategory]);
+    //         if (foundCategory) {
+    //             setShowSubCategories(foundCategory.subCategories);
+    //             setSelectedCategory(foundCategory.lable);
+    //             if (paramsSubCategory) {
+    //                 setSelectedSubCategory(paramsSubCategory);
+    //             }
+    //         }
+    //     }
+
+    // }, [paramsCategory, paramsSubCategory]);
 
     return (
         <div>

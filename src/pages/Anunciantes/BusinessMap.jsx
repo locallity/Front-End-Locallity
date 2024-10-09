@@ -7,6 +7,7 @@ import { MdKeyboardDoubleArrowRight, MdKeyboardDoubleArrowLeft } from 'react-ico
 import pathname from '../../routes';
 // import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
+import { category } from './Anunciantes';
 // import testImg from '../../assets/images/logo-4-01.jpg';
 
 const fetchAllData = async () => {
@@ -19,32 +20,44 @@ const fetchAllData = async () => {
     }
 };
 
+const fetchFilteredData = async (categorie, subCategory, otherFilter) => {
+    try {
+        let data = new FormData();
+        if (categorie) data.append('category', categorie);
+        if (subCategory) data.append('subcategory', subCategory);
+        if (otherFilter) data.append(otherFilter?.title, '1');
+
+        const response = await axios.post(`${config.base_URL}${config.filter}`, data);
+        return response.data?.data || [];
+    } catch (error) {
+        console.error('Error fetching filtered data:', error);
+        return [];
+    }
+};
+
 const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories}) => {
     const [maindata, setMainData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
+    const paramsCategory = searchParams.get('category');
+    const paramsSubCategory = searchParams.get('subcategory');
     const navigate = useRedirect();
     const isInitialRender = useRef(true);
 
     const fetchData = async (categorie, subCategory, otherFilter) => {
         setLoading(true);
-        let data = new FormData();
         try {
-            if (categorie) data.append('category', categorie);
-            if (subCategory) data.append('subcategory', subCategory);
-            if (otherFilter) data.append(otherFilter?.title, '1');
-
+            let data;
             if (categorie || subCategory || otherFilter) {
-                console.log("categorie", categorie);
-                const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-                setMainData(response.data?.data || []);
+                console.log("from filter", new Date().getSeconds(), new Date().getMilliseconds());
+                data = await fetchFilteredData(categorie, subCategory, otherFilter);
             } else {
-                console.log("categorie", categorie);
-                const allData = await fetchAllData();
-                setMainData(allData);
+                console.log("from All data", new Date().getSeconds(), new Date().getMilliseconds());
+                data = await fetchAllData();
             }
+            setMainData(data);
             
         } catch (error) {
             console.log('Error fetching data:', error);
@@ -71,10 +84,21 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     useEffect(() => {
         if (isInitialRender.current) {
             isInitialRender.current = false;
-            return;
         }
-        fetchData(categorie, subCategory, otherFilter);
-    }, [categorie, subCategory, otherFilter]);
+        if (paramsCategory) {
+            const foundCategory = category.find(cat => cat.lable === paramsCategory);
+            
+            if (foundCategory) {
+                setShowSubCategories(foundCategory.subCategories);
+                setCategorie(foundCategory.lable);
+                if (paramsSubCategory) {
+                    setSubCategory(paramsSubCategory);
+                }
+            }
+        }
+        fetchData(categorie || paramsCategory, subCategory || paramsSubCategory, otherFilter);
+    }, [categorie, subCategory, otherFilter, paramsCategory, paramsSubCategory]);
+
 
     // const generateData = () => {
     //     const data = [];
@@ -102,7 +126,8 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     const getPageData = () => {
         const startIndex = (currentPage - 1) * dataPerPage;
         const endIndex = startIndex + dataPerPage;
-        return maindata?.slice(startIndex, endIndex);
+        const resData = maindata?.slice(startIndex, endIndex);
+        return resData;
     };
     const pagesToShow = 5;
     const getPageLinks = () => {
@@ -146,6 +171,8 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
             </div>
         </div>
     }
+    console.log(maindata);
+    console.log(categorie);
     return (
         <>
             <p className="fs-6 fw-medium mt-1">{maindata?.length} anunciantes</p>
@@ -157,7 +184,8 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
                     </div>
                 }
                 {
-                    getPageData()?.map(item => (
+                    loading ? <p>loading</p> :
+                    getPageData().map(item => (
                         <div key={item.id_business} onClick={()=>navigate(`${pathname.negocio}/${item.id_business}`)} className='text-center cursor-pointer col-6 col-sm-4 col-xl-3 px-2 px-sm-2 mb-5 anuncian-card'>
                             <img src={item.logo_url} className="card-img-top" alt={item.name} />
                             <div>
