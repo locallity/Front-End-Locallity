@@ -6,81 +6,60 @@ import config from '../../config';
 import { MdKeyboardDoubleArrowRight, MdKeyboardDoubleArrowLeft } from 'react-icons/md';
 import pathname from '../../routes';
 // import { toast } from 'react-toastify';
-import { useLocation } from 'react-router-dom';
-import { category } from './Anunciantes';
 
 const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories}) => {
     const [maindata, setMainData] = useState([]);
     const [sliceData, setSliceData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    let paramsCategory = searchParams.get('category');
-    let paramsSubCategory = searchParams.get('subcategory');
     const navigate = useRedirect();
     const isInitialRender = useRef(true);
+    // const isFetching = useRef(false); // Prevent redundant fetching
 
-    const fetchData = async (categorie, subCategory, otherFilter) => {
+    const fetchData = async (fdata) => {
+        // if (isFetching.current) return; // Block repeated fetching
+        // isFetching.current = true;
+
         setLoading(true);
         try {
-            let fdata = new FormData();
-            if (categorie) fdata.append('category', categorie);
-            if (subCategory) fdata.append('subcategory', subCategory);
-            if (otherFilter) fdata.append(otherFilter?.title, '1');
-
-            // const response = await axios.post(`${config.base_URL}${config.filter}`, fdata);
-            const response = await axios.post(`http://localhost:5000/api/v1/filter`, fdata);
-            const data = response.data?.data || [];
-            setMainData(data);
-            setLoading(false);
+            console.log("fdata", fdata);
+            let response;
+            if (fdata) {
+                response = await axios.post(`${config.base_URL}${config.filter}`, fdata);
+            } else {
+                response = await axios.post(`${config.base_URL}${config.filter}`);
+            }
+            console.log("Fetched Data: ", response.data?.data); // Log fetched data
+            setMainData(response.data?.data || []);
         } catch (error) {
             console.log('Error fetching data:', error);
             setMainData([]);
-            setLoading(false);
         } finally {
             setLoading(false);
+            // isFetching.current = false; // Reset fetching flag
         }
     };
     // Effect to trigger data fetching based on category, subcategory, or filters
     useEffect(() => {
         if (isInitialRender.current) {
             isInitialRender.current = false;
-            if (paramsCategory) {
-                const foundCategory = category.find(cat => cat.lable === paramsCategory);
-                
-                if (foundCategory) {
-                    setShowSubCategories(foundCategory.subCategories);
-                    setCategorie(foundCategory.lable);
-                    if (paramsSubCategory) {
-                        setSubCategory(paramsSubCategory);
-                    }
-                }
-            }
-            const newUrl = location.pathname;
-            searchParams.delete("category");
-            searchParams.delete("subcategory");
-            window.history.replaceState(null, '', newUrl);
         }
+        
         // Handle when category or subcategory is cleared
-        console.log("category", categorie);
-        console.log("paramcategory",paramsCategory);
-        fetchData(categorie, subCategory, otherFilter);
-    }, [categorie, subCategory, otherFilter, paramsCategory, paramsSubCategory]);
+        let fdata = new FormData();
+        if (categorie) fdata.append('category', categorie);
+        if (subCategory) fdata.append('subcategory', subCategory);
+        if (otherFilter) fdata.append(otherFilter?.title, '1');
+        fetchData(fdata);
+    }, [categorie, subCategory, otherFilter]);
 
     const dataPerPage = 10;
-    let totalPage = Math.ceil(maindata?.length / dataPerPage);
-    useEffect(() => { 
-        setLoading(true);
-        totalPage = Math.ceil(maindata?.length / dataPerPage);
-        const getPageData = () => {
-            const startIndex = (currentPage - 1) * dataPerPage;
-            const endIndex = startIndex + dataPerPage;
-            const resData = maindata?.slice(startIndex, endIndex);
-            setSliceData(resData);
-        };
-        getPageData();
-        setLoading(false);
+    const totalPage = Math.ceil(maindata?.length / dataPerPage);
+    useEffect(() => {
+        console.log('Slice Maindata: ', maindata); // Log maindata updates
+        const startIndex = (currentPage - 1) * dataPerPage;
+        const endIndex = startIndex + dataPerPage;
+        setSliceData(maindata.slice(startIndex, endIndex));
     }, [maindata, currentPage]);
 
     
@@ -126,11 +105,13 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     };
     
     if (loading) {
-        return <div className="d-flex justify-content-center py-5 my-5">
+        return (
+        <div className="d-flex justify-content-center py-5 my-5">
             <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
+                <span className="visually-hidden">Loading...</span>
             </div>
         </div>
+        )
     }
     return (
         <>
@@ -143,8 +124,7 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
                     </div>
                 }
                 {
-                    loading ? <p>...</p> :
-                    sliceData.map(item => (
+                    sliceData?.map(item => (
                         <div key={item.id_business} onClick={()=>navigate(`${pathname.negocio}/${item.id_business}`)} className='text-center cursor-pointer col-6 col-sm-4 col-xl-3 px-2 px-sm-2 mb-5 anuncian-card'>
                             <img src={item.logo_url} className="card-img-top" alt={item.name} />
                             <div>
