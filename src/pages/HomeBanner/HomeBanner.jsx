@@ -53,7 +53,7 @@ const HomeBanner = () => {
                                     <Form.Select onChange={e => setSearch(e.target.value)} className="selectItemBox" aria-label="Default select example">
                                         <option value="">Elige la categoría</option>
                                         <option value="Comida">Comida</option>
-                                        <option value="Infantil / Bebés">Infantil / Bebés</option>
+                                        <option value="Infantil/Bebés">Infantil/Bebés</option>
                                         <option value="Hogar">Hogar</option>
                                         <option value="Papelería">Papelería</option>
                                         <option value="Eventos">Eventos</option>

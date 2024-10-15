@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Anunciantes.css';
 import { Row, Col, Form } from 'react-bootstrap';
-// import bakery from '../../assets/images/logo-4-01.jpg';
 import Footer from '../HomeBanner/Footer';
 import Navigation from '../HomeBanner/Navigation';
 import BusinessMap from './BusinessMap';
 import { SlArrowUp, SlArrowDown } from 'react-icons/sl';
 import { toast } from 'react-toastify';
+import { useLocation } from 'react-router-dom';
 
 
-const category = [
+export const category = [
     {id: 1, lable: 'Comida',
         subCategories: [
             {id: 1, lable: 'Pasteles'},
@@ -107,36 +107,65 @@ const Anunciantes = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [selectedOtherFilter, setSelectedOtherFilter] = useState('');
+    const [isSelected, setIsSeleted] = useState(false);
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const paramsCategory = searchParams.get('category');
+    const paramsSubCategory = searchParams.get('subcategory');
+
+    useEffect(() => {
+        if (paramsCategory) {
+            const foundCategory = category.find(cat => cat.lable === paramsCategory);
+            
+            if (foundCategory) {
+                setShowSubCategories(foundCategory.subCategories);
+                setSelectedCategory(foundCategory.lable);
+                if (paramsSubCategory) {
+                    setSelectedSubCategory(paramsSubCategory);
+                }
+            }
+            setIsSeleted(true);
+        }
+        console.log(paramsCategory);
+    }, [])
+
     const handleCategoryChange = (event, category) => {
         const isChecked = event.target.checked;
         if (isChecked) {
             setShowSubCategories(category.subCategories);
             setSelectedCategory(category.lable);
+            setIsSeleted(true);
         } else {
             setSelectedCategory('');
             setSelectedSubCategory('');
             setShowSubCategories([]);
+            setIsSeleted(false);
         }
     };
     const handleSubCategoryChange = (event, subCategory) => {
         const isChecked = event.target.checked;
         if (isChecked && selectedCategory) {
             setSelectedSubCategory(subCategory);
+            setIsSeleted(true);
         } else {
             setSelectedSubCategory('');
             if (!selectedCategory) {
                 toast.warn('Please Select Category first');
             }
+            setIsSeleted(false);
         }
     };
     const handleOtherFilltersChange = (event, other) => {
         const isChecked = event.target.checked;
         if (isChecked) {
             setSelectedOtherFilter(other);
+            setIsSeleted(true);
         } else {
             setSelectedOtherFilter('');
+            setIsSeleted(false);
         }
     };
+
     return (
         <div>
             <Navigation />
@@ -246,15 +275,17 @@ const Anunciantes = () => {
                 </Col>
                 <Col lg={9} md={12} sm={12}>
                    
-                        <BusinessMap
-                            setCategorie={setSelectedCategory}
-                            categorie={selectedCategory}
-                            setSubCategory={setSelectedSubCategory}
-                            subCategory={selectedSubCategory}
-                            setOtherFilter={setSelectedOtherFilter}
-                            otherFilter={selectedOtherFilter}
-                            setShowSubCategories={setShowSubCategories}
-                        />
+                    <BusinessMap
+                        setCategorie={setSelectedCategory}
+                        categorie={selectedCategory}
+                        setSubCategory={setSelectedSubCategory}
+                        subCategory={selectedSubCategory}
+                        setOtherFilter={setSelectedOtherFilter}
+                        otherFilter={selectedOtherFilter}
+                        setShowSubCategories={setShowSubCategories}
+                        isSelected={isSelected}
+                        setIsSeleted={setIsSeleted}
+                    />
                         
                 </Col>
             </Row>
