@@ -24,14 +24,6 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     const fetchData = async (categorie, subCategory, otherFilter) => {
         setLoading(true);
         try {
-            // let data;
-            // if (categorie || subCategory || otherFilter) {
-            //     console.log("inside the fetchdata", categorie);
-            //     data = await fetchFilteredData(categorie, subCategory, otherFilter);
-            // } else {
-            //     console.log("inside the fetchdata and alldata", categorie);
-            //     data = await fetchAllData();
-            // }
             let fdata = new FormData();
             if (categorie) fdata.append('category', categorie);
             if (subCategory) fdata.append('subcategory', subCategory);
