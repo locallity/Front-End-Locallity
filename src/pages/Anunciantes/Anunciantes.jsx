@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Anunciantes.css';
 import { Row, Col, Form } from 'react-bootstrap';
 import Footer from '../HomeBanner/Footer';
@@ -98,10 +98,6 @@ const OtrosFiltros = [
 ]
 
 
-function getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 const Anunciantes = () => {
     const [showCategory, setShowCategory] = useState(true);
     const [showSub, setShowSub] = useState(true);
@@ -110,7 +106,6 @@ const Anunciantes = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [selectedOtherFilter, setSelectedOtherFilter] = useState('');
-    const [random, setRandom] = useState(null);
     const handleCategoryChange = (event, category) => {
         const isChecked = event.target.checked;
         if (isChecked) {
@@ -121,7 +116,6 @@ const Anunciantes = () => {
             setSelectedSubCategory('');
             setShowSubCategories([]);
         }
-        setRandom(getRandomNumber());
     };
     const handleSubCategoryChange = (event, subCategory) => {
         const isChecked = event.target.checked;
@@ -141,7 +135,6 @@ const Anunciantes = () => {
         } else {
             setSelectedOtherFilter('');
         }
-        setRandom(getRandomNumber());
     };
 
     return (
@@ -261,7 +254,6 @@ const Anunciantes = () => {
                         setOtherFilter={setSelectedOtherFilter}
                         otherFilter={selectedOtherFilter}
                         setShowSubCategories={setShowSubCategories}
-                        random={random}
                     />
                         
                 </Col>

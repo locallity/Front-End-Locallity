@@ -8,35 +8,10 @@ import pathname from '../../routes';
 // import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import { category } from './Anunciantes';
-// import testImg from '../../assets/images/logo-4-01.jpg';
 
-const fetchAllData = async () => {
-    try {
-        const response = await axios.get(`${config.base_URL}${config.selectAll}`);
-        return response.data?.data || [];
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return []; 
-    }
-};
-
-const fetchFilteredData = async (categorie, subCategory, otherFilter) => {
-    try {
-        let data = new FormData();
-        if (categorie) data.append('category', categorie);
-        if (subCategory) data.append('subcategory', subCategory);
-        if (otherFilter) data.append(otherFilter?.title, '1');
-
-        const response = await axios.post(`${config.base_URL}${config.filter}`, data);
-        return response.data?.data || [];
-    } catch (error) {
-        console.error('Error fetching filtered data:', error);
-        return [];
-    }
-};
-
-const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories, random}) => {
+const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories}) => {
     const [maindata, setMainData] = useState([]);
+    const [sliceData, setSliceData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
@@ -49,14 +24,22 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     const fetchData = async (categorie, subCategory, otherFilter) => {
         setLoading(true);
         try {
-            let data;
-            if (categorie || subCategory || otherFilter) {
-                console.log("inside the fetchdata", categorie);
-                data = await fetchFilteredData(categorie, subCategory, otherFilter);
-            } else {
-                console.log("inside the fetchdata and alldata", categorie);
-                data = await fetchAllData();
-            }
+            // let data;
+            // if (categorie || subCategory || otherFilter) {
+            //     console.log("inside the fetchdata", categorie);
+            //     data = await fetchFilteredData(categorie, subCategory, otherFilter);
+            // } else {
+            //     console.log("inside the fetchdata and alldata", categorie);
+            //     data = await fetchAllData();
+            // }
+            let fdata = new FormData();
+            if (categorie) fdata.append('category', categorie);
+            if (subCategory) fdata.append('subcategory', subCategory);
+            if (otherFilter) fdata.append(otherFilter?.title, '1');
+
+            // const response = await axios.post(`${config.base_URL}${config.filter}`, fdata);
+            const response = await axios.post(`http://localhost:5000/api/v1/filter`, fdata);
+            const data = response.data?.data || [];
             setMainData(data);
             setLoading(false);
         } catch (error) {
@@ -69,7 +52,6 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     };
     // Effect to trigger data fetching based on category, subcategory, or filters
     useEffect(() => {
-        setMainData([]);
         if (isInitialRender.current) {
             isInitialRender.current = false;
             if (paramsCategory) {
@@ -87,43 +69,34 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
             searchParams.delete("category");
             searchParams.delete("subcategory");
             window.history.replaceState(null, '', newUrl);
-            fetchData(paramsCategory, paramsSubCategory);
         }
         // Handle when category or subcategory is cleared
         console.log("category", categorie);
         console.log("paramcategory",paramsCategory);
         fetchData(categorie, subCategory, otherFilter);
-    }, [categorie, subCategory, otherFilter, paramsCategory, paramsSubCategory, random]);
-
-
-    // const generateData = () => {
-    //     const data = [];
-    //     for (let i = 1; i <= 100; i++) {
-    //       const item = {
-    //         id_business: i,
-    //         name: `Business ${i}`,
-    //         logo_url: testImg,
-    //         description: `Description for Business ${i}`,
-    //       };
-    //       data.push(item);
-    //     }
-    //     return data;
-    //   };
-    // const testData = generateData();
+    }, [categorie, subCategory, otherFilter, paramsCategory, paramsSubCategory]);
 
     const dataPerPage = 10;
-    const totalPage = Math.ceil(maindata?.length / dataPerPage);
+    let totalPage = Math.ceil(maindata?.length / dataPerPage);
+    useEffect(() => { 
+        setLoading(true);
+        totalPage = Math.ceil(maindata?.length / dataPerPage);
+        const getPageData = () => {
+            const startIndex = (currentPage - 1) * dataPerPage;
+            const endIndex = startIndex + dataPerPage;
+            const resData = maindata?.slice(startIndex, endIndex);
+            setSliceData(resData);
+        };
+        getPageData();
+        setLoading(false);
+    }, [maindata, currentPage]);
+
+    
+
     const handlePageChange = (page) => {
         if (page > 0 && page <= totalPage) {
             setCurrentPage(page);
         }
-    };
-    
-    const getPageData = () => {
-        const startIndex = (currentPage - 1) * dataPerPage;
-        const endIndex = startIndex + dataPerPage;
-        const resData = maindata?.slice(startIndex, endIndex);
-        return resData;
     };
     const pagesToShow = 5;
     const getPageLinks = () => {
@@ -179,7 +152,7 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
                 }
                 {
                     loading ? <p>...</p> :
-                    getPageData().map(item => (
+                    sliceData.map(item => (
                         <div key={item.id_business} onClick={()=>navigate(`${pathname.negocio}/${item.id_business}`)} className='text-center cursor-pointer col-6 col-sm-4 col-xl-3 px-2 px-sm-2 mb-5 anuncian-card'>
                             <img src={item.logo_url} className="card-img-top" alt={item.name} />
                             <div>
