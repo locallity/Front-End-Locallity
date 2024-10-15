@@ -5,24 +5,30 @@ import axios from 'axios';
 import config from '../../config';
 import { MdKeyboardDoubleArrowRight, MdKeyboardDoubleArrowLeft } from 'react-icons/md';
 import pathname from '../../routes';
+import { useLocation } from 'react-router-dom';
 // import { toast } from 'react-toastify';
 
-const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories}) => {
+const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories, isSelected, setIsSeleted}) => {
     const [maindata, setMainData] = useState([]);
     const [sliceData, setSliceData] = useState([]);
+    const [isChecked, setIsChecked] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const navigate = useRedirect();
     const isInitialRender = useRef(true);
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const paramsCategory = searchParams.get('category');
     // const isFetching = useRef(false); // Prevent redundant fetching
 
     const fetchData = async (fdata) => {
         // if (isFetching.current) return; // Block repeated fetching
         // isFetching.current = true;
-
+        setMainData([]);
         setLoading(true);
         try {
             console.log("fdata", fdata);
+            console.log("into fetchdata func");
             let response;
             if (fdata) {
                 response = await axios.post(`${config.base_URL}${config.filter}`, fdata);
@@ -46,12 +52,26 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
         }
         
         // Handle when category or subcategory is cleared
+        console.log(categorie);
+        setMainData([]);
+        setSliceData([]);
         let fdata = new FormData();
         if (categorie) fdata.append('category', categorie);
         if (subCategory) fdata.append('subcategory', subCategory);
         if (otherFilter) fdata.append(otherFilter?.title, '1');
-        fetchData(fdata);
-    }, [categorie, subCategory, otherFilter]);
+        console.log("query category 1", );
+        if (isSelected) {
+            fetchData(fdata);
+            setIsChecked(true);
+        }
+        else if(isChecked && !isSelected)  {
+            fetchData(null);
+        }
+        else if (!isChecked && !isSelected && !paramsCategory) {
+            fetchData(null);
+        }
+        window.history.replaceState(null, '', location.pathname);
+    }, [categorie, subCategory, otherFilter, isSelected]);
 
     const dataPerPage = 10;
     const totalPage = Math.ceil(maindata?.length / dataPerPage);

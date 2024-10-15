@@ -107,6 +107,7 @@ const Anunciantes = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [selectedOtherFilter, setSelectedOtherFilter] = useState('');
+    const [isSelected, setIsSeleted] = useState(false);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramsCategory = searchParams.get('category');
@@ -123,8 +124,9 @@ const Anunciantes = () => {
                     setSelectedSubCategory(paramsSubCategory);
                 }
             }
+            setIsSeleted(true);
         }
-        window.history.replaceState(null, '', location.pathname);
+        console.log(paramsCategory);
     }, [])
 
     const handleCategoryChange = (event, category) => {
@@ -132,29 +134,35 @@ const Anunciantes = () => {
         if (isChecked) {
             setShowSubCategories(category.subCategories);
             setSelectedCategory(category.lable);
+            setIsSeleted(true);
         } else {
             setSelectedCategory('');
             setSelectedSubCategory('');
             setShowSubCategories([]);
+            setIsSeleted(false);
         }
     };
     const handleSubCategoryChange = (event, subCategory) => {
         const isChecked = event.target.checked;
         if (isChecked && selectedCategory) {
             setSelectedSubCategory(subCategory);
+            setIsSeleted(true);
         } else {
             setSelectedSubCategory('');
             if (!selectedCategory) {
                 toast.warn('Please Select Category first');
             }
+            setIsSeleted(false);
         }
     };
     const handleOtherFilltersChange = (event, other) => {
         const isChecked = event.target.checked;
         if (isChecked) {
             setSelectedOtherFilter(other);
+            setIsSeleted(true);
         } else {
             setSelectedOtherFilter('');
+            setIsSeleted(false);
         }
     };
 
@@ -275,6 +283,8 @@ const Anunciantes = () => {
                         setOtherFilter={setSelectedOtherFilter}
                         otherFilter={selectedOtherFilter}
                         setShowSubCategories={setShowSubCategories}
+                        isSelected={isSelected}
+                        setIsSeleted={setIsSeleted}
                     />
                         
                 </Col>
