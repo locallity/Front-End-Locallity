@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Anunciantes.css';
 import { Row, Col, Form } from 'react-bootstrap';
-// import bakery from '../../assets/images/logo-4-01.jpg';
 import Footer from '../HomeBanner/Footer';
 import Navigation from '../HomeBanner/Navigation';
 import BusinessMap from './BusinessMap';
 import { SlArrowUp, SlArrowDown } from 'react-icons/sl';
 import { toast } from 'react-toastify';
-import { useLocation } from 'react-router-dom';
 
 
 export const category = [
@@ -100,6 +98,10 @@ const OtrosFiltros = [
 ]
 
 
+function getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 const Anunciantes = () => {
     const [showCategory, setShowCategory] = useState(true);
     const [showSub, setShowSub] = useState(true);
@@ -108,11 +110,7 @@ const Anunciantes = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [selectedOtherFilter, setSelectedOtherFilter] = useState('');
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const paramsCategory = searchParams.get('category');
-    const paramsSubCategory = searchParams.get('subcategory');
-    const isInitialRenders = useRef(true);
+    const [random, setRandom] = useState(null);
     const handleCategoryChange = (event, category) => {
         const isChecked = event.target.checked;
         if (isChecked) {
@@ -123,6 +121,7 @@ const Anunciantes = () => {
             setSelectedSubCategory('');
             setShowSubCategories([]);
         }
+        setRandom(getRandomNumber());
     };
     const handleSubCategoryChange = (event, subCategory) => {
         const isChecked = event.target.checked;
@@ -142,25 +141,8 @@ const Anunciantes = () => {
         } else {
             setSelectedOtherFilter('');
         }
+        setRandom(getRandomNumber());
     };
-
-    // useEffect(() => {
-    //     if (isInitialRenders.current) {
-    //         isInitialRenders.current = false;
-    //     }
-    //     if (paramsCategory) {
-    //         const foundCategory = category.find(cat => cat.lable === paramsCategory);
-            
-    //         if (foundCategory) {
-    //             setShowSubCategories(foundCategory.subCategories);
-    //             setSelectedCategory(foundCategory.lable);
-    //             if (paramsSubCategory) {
-    //                 setSelectedSubCategory(paramsSubCategory);
-    //             }
-    //         }
-    //     }
-
-    // }, [paramsCategory, paramsSubCategory]);
 
     return (
         <div>
@@ -271,15 +253,16 @@ const Anunciantes = () => {
                 </Col>
                 <Col lg={9} md={12} sm={12}>
                    
-                        <BusinessMap
-                            setCategorie={setSelectedCategory}
-                            categorie={selectedCategory}
-                            setSubCategory={setSelectedSubCategory}
-                            subCategory={selectedSubCategory}
-                            setOtherFilter={setSelectedOtherFilter}
-                            otherFilter={selectedOtherFilter}
-                            setShowSubCategories={setShowSubCategories}
-                        />
+                    <BusinessMap
+                        setCategorie={setSelectedCategory}
+                        categorie={selectedCategory}
+                        setSubCategory={setSelectedSubCategory}
+                        subCategory={selectedSubCategory}
+                        setOtherFilter={setSelectedOtherFilter}
+                        otherFilter={selectedOtherFilter}
+                        setShowSubCategories={setShowSubCategories}
+                        random={random}
+                    />
                         
                 </Col>
             </Row>

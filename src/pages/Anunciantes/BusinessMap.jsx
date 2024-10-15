@@ -35,14 +35,14 @@ const fetchFilteredData = async (categorie, subCategory, otherFilter) => {
     }
 };
 
-const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories}) => {
+const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories, random}) => {
     const [maindata, setMainData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const paramsCategory = searchParams.get('category');
-    const paramsSubCategory = searchParams.get('subcategory');
+    let paramsCategory = searchParams.get('category');
+    let paramsSubCategory = searchParams.get('subcategory');
     const navigate = useRedirect();
     const isInitialRender = useRef(true);
 
@@ -51,53 +51,49 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
         try {
             let data;
             if (categorie || subCategory || otherFilter) {
-                console.log("from filter", new Date().getSeconds(), new Date().getMilliseconds());
+                console.log("inside the fetchdata", categorie);
                 data = await fetchFilteredData(categorie, subCategory, otherFilter);
             } else {
-                console.log("from All data", new Date().getSeconds(), new Date().getMilliseconds());
+                console.log("inside the fetchdata and alldata", categorie);
                 data = await fetchAllData();
             }
             setMainData(data);
-            
+            setLoading(false);
         } catch (error) {
             console.log('Error fetching data:', error);
             setMainData([]);
-            // setShowData([]);
-            // handleNoData(categorie, subCategory);
+            setLoading(false);
         } finally {
             setLoading(false);
         }
     };
-
-    // Handle case when no data is found or there's an error
-    // const handleNoData = async (categorie, subCategory) => {
-    //     if (categorie && subCategory) setSubCategory('');
-    //     else if (categorie) {
-    //         setCategorie('');
-    //         setShowSubCategories([]);
-    //     }
-
-    //     setMainData(await fetchAllData());
-    // };
-
     // Effect to trigger data fetching based on category, subcategory, or filters
     useEffect(() => {
+        setMainData([]);
         if (isInitialRender.current) {
             isInitialRender.current = false;
-        }
-        if (paramsCategory) {
-            const foundCategory = category.find(cat => cat.lable === paramsCategory);
-            
-            if (foundCategory) {
-                setShowSubCategories(foundCategory.subCategories);
-                setCategorie(foundCategory.lable);
-                if (paramsSubCategory) {
-                    setSubCategory(paramsSubCategory);
+            if (paramsCategory) {
+                const foundCategory = category.find(cat => cat.lable === paramsCategory);
+                
+                if (foundCategory) {
+                    setShowSubCategories(foundCategory.subCategories);
+                    setCategorie(foundCategory.lable);
+                    if (paramsSubCategory) {
+                        setSubCategory(paramsSubCategory);
+                    }
                 }
             }
+            const newUrl = location.pathname;
+            searchParams.delete("category");
+            searchParams.delete("subcategory");
+            window.history.replaceState(null, '', newUrl);
+            fetchData(paramsCategory, paramsSubCategory);
         }
-        fetchData(categorie || paramsCategory, subCategory || paramsSubCategory, otherFilter);
-    }, [categorie, subCategory, otherFilter, paramsCategory, paramsSubCategory]);
+        // Handle when category or subcategory is cleared
+        console.log("category", categorie);
+        console.log("paramcategory",paramsCategory);
+        fetchData(categorie, subCategory, otherFilter);
+    }, [categorie, subCategory, otherFilter, paramsCategory, paramsSubCategory, random]);
 
 
     // const generateData = () => {
@@ -171,8 +167,6 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
             </div>
         </div>
     }
-    console.log(maindata);
-    console.log(categorie);
     return (
         <>
             <p className="fs-6 fw-medium mt-1">{maindata?.length} anunciantes</p>
@@ -184,7 +178,7 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
                     </div>
                 }
                 {
-                    loading ? <p>loading</p> :
+                    loading ? <p>...</p> :
                     getPageData().map(item => (
                         <div key={item.id_business} onClick={()=>navigate(`${pathname.negocio}/${item.id_business}`)} className='text-center cursor-pointer col-6 col-sm-4 col-xl-3 px-2 px-sm-2 mb-5 anuncian-card'>
                             <img src={item.logo_url} className="card-img-top" alt={item.name} />

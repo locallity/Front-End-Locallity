@@ -166,79 +166,82 @@ const Navigation = () => {
                     <Nav.Link className={`navDesign ${color && 'text-white'}`} onClick={() => navigate(pathname.home)}>Inicio</Nav.Link>
                       <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="/#about" >Nosotros</Nav.Link>
                       <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="/#safety">Seguridad</Nav.Link>
-                      <Nav.Link className={`navDesign ${color && 'text-white'}`}  href="/#map">Mapa</Nav.Link>
-                      <NavDropdown 
-                      id="dropdownMenu" 
-                      title="Categorías"
-                      onMouseEnter={onCategoryHover}
-                      onMouseLeave={onCategoryLeave}
-                    
-                      className={`${color && 'text-custom-white'}`}
-                      >
-                        <div className="d-flex categoriesDiv">
-                          <ul className="ul-categories">
-                            <li className="--comida"
-                            onMouseEnter={() => onCategoryHover('Comida')}
-                            onClick={() => setCategory('Comida')}
-                            >Comida</li>
-                            <li className="--infantil-bebe"
-                            onMouseEnter={() => onCategoryHover('Infantil/Bebés')}
-                            onClick={() => setCategory('Infantil/Bebés')}
-                            >Infantil&nbsp;/&nbsp;Bebés</li>
-                            <li className="--hogar"
-                            onMouseEnter={()=>onCategoryHover('Hogar')}
-                            onClick={() => setCategory('Hogar')}
-                            >Hogar</li>
-                            <li className="--papeleria"
-                            onMouseEnter={()=>onCategoryHover('Papelería')}
-                            onClick={() => setCategory('Papelería')}
-                            >Papelería</li>
-                            <li className="--eventos"
-                            onMouseEnter={()=>onCategoryHover('Eventos')}
-                            onClick={() => setCategory('Eventos')}
-                            >Eventos</li>
-                            <li className="--regalos"
-                              onMouseEnter={()=>onCategoryHover('Regalos')}
-                              onClick={() => setCategory('Regalos')}
-                            >Regalos</li>
-                            <li className="--bienestar"
-                            onMouseEnter={()=>onCategoryHover('Bienestar')}
-                            onClick={() => setCategory('Bienestar')}
-                            >Bienestar</li>
-                            <li className="--shopping"
-                              onMouseEnter={()=>onCategoryHover('Shopping')}
-                              onClick={() => setCategory('Shopping')}
-                            >Shopping</li>
-                        </ul>
-                        <ul className="ul-subcategories">
-                            <li className="text-header-subcategories">Subcategorías</li>    
-                            <hr className="mt-1 mb-2" />         
-                            <div>
-                                <p className={`${showSubcategories === null ? '' : 'd-none'}`}>Elige una categoría para desplegar sus respectivas subcategorías.</p>
-                            </div>
-                            
-                            {categoryWithSub.map((categoryItem) => (
-                              <div key={categoryItem.id} className={`${showSubcategories === categoryItem.lable ? '' : 'd-none'}`}>
-                                {categoryItem.subCategories.map(subC => (
-                                  <li key={subC.id} className='cursor-pointer' onClick={() => setCategoryAndSub(categoryItem.lable, subC.lable)}>
-                                    {subC.lable}
-                                  </li>
-                                ))}
+                      <Nav.Link className={`navDesign ${color && 'text-white'}`} href="/#map">Mapa</Nav.Link>
+                      {
+                        currentPath !== "/anunciantes" &&
+                        <NavDropdown 
+                        id="dropdownMenu" 
+                        title="Categorías"
+                        onMouseEnter={onCategoryHover}
+                        onMouseLeave={onCategoryLeave}
+                      
+                        className={`${color && 'text-custom-white'}`}
+                        >
+                          <div className="d-flex categoriesDiv">
+                            <ul className="ul-categories">
+                              <li className="--comida"
+                              onMouseEnter={() => onCategoryHover('Comida')}
+                              onClick={() => setCategory('Comida')}
+                              >Comida</li>
+                              <li className="--infantil-bebe"
+                              onMouseEnter={() => onCategoryHover('Infantil/Bebés')}
+                              onClick={() => setCategory('Infantil/Bebés')}
+                              >Infantil&nbsp;/&nbsp;Bebés</li>
+                              <li className="--hogar"
+                              onMouseEnter={()=>onCategoryHover('Hogar')}
+                              onClick={() => setCategory('Hogar')}
+                              >Hogar</li>
+                              <li className="--papeleria"
+                              onMouseEnter={()=>onCategoryHover('Papelería')}
+                              onClick={() => setCategory('Papelería')}
+                              >Papelería</li>
+                              <li className="--eventos"
+                              onMouseEnter={()=>onCategoryHover('Eventos')}
+                              onClick={() => setCategory('Eventos')}
+                              >Eventos</li>
+                              <li className="--regalos"
+                                onMouseEnter={()=>onCategoryHover('Regalos')}
+                                onClick={() => setCategory('Regalos')}
+                              >Regalos</li>
+                              <li className="--bienestar"
+                              onMouseEnter={()=>onCategoryHover('Bienestar')}
+                              onClick={() => setCategory('Bienestar')}
+                              >Bienestar</li>
+                              <li className="--shopping"
+                                onMouseEnter={()=>onCategoryHover('Shopping')}
+                                onClick={() => setCategory('Shopping')}
+                              >Shopping</li>
+                          </ul>
+                          <ul className="ul-subcategories">
+                              <li className="text-header-subcategories">Subcategorías</li>    
+                              <hr className="mt-1 mb-2" />         
+                              <div>
+                                  <p className={`${showSubcategories === null ? '' : 'd-none'}`}>Elige una categoría para desplegar sus respectivas subcategorías.</p>
                               </div>
-                            ))}
-                        </ul>
-                        </div>
-                        {/* <div className="bottomNav">
-                          <div className="text-div">
-                              <h4 className="mb-0 text-white">¡Date a conocer!</h4>
-                              <p className="mb-0">Anuncia tu negocio en Locallity.com</p>
+                              
+                              {categoryWithSub.map((categoryItem) => (
+                                <div key={categoryItem.id} className={`${showSubcategories === categoryItem.lable ? '' : 'd-none'}`}>
+                                  {categoryItem.subCategories.map(subC => (
+                                    <li key={subC.id} className='cursor-pointer' onClick={() => setCategoryAndSub(categoryItem.lable, subC.lable)}>
+                                      {subC.lable}
+                                    </li>
+                                  ))}
+                                </div>
+                              ))}
+                          </ul>
                           </div>
-                          <div className="btn-div">
-                            <p onClick={() => navigate(pathname.registration)} className='btn btn-outline-light border-1 rounded-1 py-2 px-3 fw-semibold'>Registrarme</p>
-                          </div>
-                        </div> */}
+                          {/* <div className="bottomNav">
+                            <div className="text-div">
+                                <h4 className="mb-0 text-white">¡Date a conocer!</h4>
+                                <p className="mb-0">Anuncia tu negocio en Locallity.com</p>
+                            </div>
+                            <div className="btn-div">
+                              <p onClick={() => navigate(pathname.registration)} className='btn btn-outline-light border-1 rounded-1 py-2 px-3 fw-semibold'>Registrarme</p>
+                            </div>
+                          </div> */}
 
-                    </NavDropdown>
+                        </NavDropdown>
+                      }
                   </div>
                   {/* <div className='d-flex align-items-center gap-2'>
                     <Nav.Link className={`navDesign ${color && 'text-white'}`} onClick={() => navigate(pathname.registration)}>Registra tu marca</Nav.Link>
