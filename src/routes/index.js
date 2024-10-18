@@ -1,3 +1,4 @@
+
 const pathname = {
     home: '/',
     registration: '/registration',
