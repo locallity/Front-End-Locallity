@@ -167,7 +167,7 @@ const Anunciantes = () => {
     };
 
     return (
-        <div>
+        <div className="d-flex flex-column min-vh-100">
             <Navigation />
             <div className="container mt-3 pb-3">
             <Row >
@@ -290,7 +290,6 @@ const Anunciantes = () => {
                 </Col>
             </Row>
             </div>
-            <hr />
             <Footer />
         </div>
     );
