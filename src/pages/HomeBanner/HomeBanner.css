@@ -372,8 +372,8 @@
 }
 .copyRightDiv{
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
 .linkFooter{
     text-decoration: none;
@@ -382,7 +382,7 @@
   margin-right: 1.5rem !important;
 }
 .list-inline-item:hover{
-    color: #4a4a4c;
+    color: #c8c8d1;
 }
 
 .paddingClass{
@@ -407,6 +407,12 @@
 .btnDiv{
     float: left;
     margin-left:-25px;
+}
+
+.footerBottom {
+    width: 100%;
+    position: relative;
+    bottom: 0;
 }
 
 

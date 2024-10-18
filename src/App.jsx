@@ -20,7 +20,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div>
       {loading && <BrandAnimation setLoading={setLoading} />}
       <Routes>
         <Route path={pathname.home} element={<HomeBanner />} ></Route>
