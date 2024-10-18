@@ -266,23 +266,25 @@ const Navigation = () => {
               className={mobileNavOpen ? 'show' : ''} >
               
               <Nav className="me-auto">
+                {
+                  currentPath !== "/anunciantes" &&
+                  <NavDropdown className="navDropDownXs" title="Categorías" id="mbl-basic-navbar-nav">
+                    
+                    {
+                        categoryWithSub.map(cat => (
+                          <ul key={cat.id} className="navbar-nav ml-auto">
+                            <span className='text-white' onClick={() => setCategory(cat.lable)}>{cat.lable}</span>
+                            {
+                              cat.subCategories.map(subCat => (
+                                <li key={subCat.id} className='text-white' onClick={() => setCategoryAndSub(cat.lable, subCat.lable)}>{subCat.lable}</li>
+                              ))
+                            }
+                        </ul>
+                      ))
+                    }
 
-                <NavDropdown className="navDropDownXs" title="Categorías" id="mbl-basic-navbar-nav">
-                  
-                  {
-                      categoryWithSub.map(cat => (
-                        <ul key={cat.id} className="navbar-nav ml-auto">
-                          <span className='text-white' onClick={() => setCategory(cat.lable)}>{cat.lable}</span>
-                          {
-                            cat.subCategories.map(subCat => (
-                              <li key={subCat.id} className='text-white' onClick={() => setCategoryAndSub(cat.lable, subCat.lable)}>{subCat.lable}</li>
-                            ))
-                          }
-                      </ul>
-                    ))
-                  }
-
-                </NavDropdown>
+                  </NavDropdown>
+                }
 
                     <Nav.Link className="navDesignXs"  href="/#about" >Nosotros</Nav.Link>
                     <Nav.Link className="navDesignXs"  href="/#safety">Seguridad</Nav.Link>
