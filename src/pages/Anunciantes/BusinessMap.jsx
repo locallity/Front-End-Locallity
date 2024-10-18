@@ -6,7 +6,6 @@ import config from '../../config';
 import { MdKeyboardDoubleArrowRight, MdKeyboardDoubleArrowLeft } from 'react-icons/md';
 import pathname from '../../routes';
 import { useLocation } from 'react-router-dom';
-// import { toast } from 'react-toastify';
 
 const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setOtherFilter, otherFilter, setShowSubCategories, isSelected, setIsSeleted}) => {
     const [maindata, setMainData] = useState([]);
@@ -19,30 +18,23 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paramsCategory = searchParams.get('category');
-    // const isFetching = useRef(false); // Prevent redundant fetching
 
     const fetchData = async (fdata) => {
-        // if (isFetching.current) return; // Block repeated fetching
-        // isFetching.current = true;
         setMainData([]);
         setLoading(true);
         try {
-            console.log("fdata", fdata);
-            console.log("into fetchdata func");
             let response;
             if (fdata) {
                 response = await axios.post(`${config.base_URL}${config.filter}`, fdata);
             } else {
                 response = await axios.post(`${config.base_URL}${config.filter}`);
             }
-            console.log("Fetched Data: ", response.data?.data); // Log fetched data
             setMainData(response.data?.data || []);
         } catch (error) {
             console.log('Error fetching data:', error);
             setMainData([]);
         } finally {
             setLoading(false);
-            // isFetching.current = false; // Reset fetching flag
         }
     };
     // Effect to trigger data fetching based on category, subcategory, or filters
@@ -52,14 +44,12 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
         }
         
         // Handle when category or subcategory is cleared
-        console.log(categorie);
         setMainData([]);
         setSliceData([]);
         let fdata = new FormData();
         if (categorie) fdata.append('category', categorie);
         if (subCategory) fdata.append('subcategory', subCategory);
         if (otherFilter) fdata.append(otherFilter?.title, '1');
-        console.log("query category 1", );
         if (isSelected) {
             fetchData(fdata);
             setIsChecked(true);
@@ -76,7 +66,6 @@ const BusinessMap = ({setCategorie, categorie, setSubCategory, subCategory, setO
     const dataPerPage = 10;
     const totalPage = Math.ceil(maindata?.length / dataPerPage);
     useEffect(() => {
-        console.log('Slice Maindata: ', maindata); // Log maindata updates
         const startIndex = (currentPage - 1) * dataPerPage;
         const endIndex = startIndex + dataPerPage;
         setSliceData(maindata.slice(startIndex, endIndex));

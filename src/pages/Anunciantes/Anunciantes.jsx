@@ -126,7 +126,6 @@ const Anunciantes = () => {
             }
             setIsSeleted(true);
         }
-        console.log(paramsCategory);
     }, [])
 
     const handleCategoryChange = (event, category) => {

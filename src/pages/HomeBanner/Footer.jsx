@@ -1,4 +1,3 @@
-import React, { Fragment} from 'react';
 import './HomeBanner.css';
 import { Container } from 'react-bootstrap';
 import {AiFillFacebook} from 'react-icons/ai'
